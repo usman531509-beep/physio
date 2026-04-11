@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thames Physio Services | Professional Care in Twickenham</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50:  "#eff6ff", 100: "#dbeafe", 200: "#bfdbfe",
+              300: "#93c5fd", 400: "#60a5fa", 500: "#3b82f6",
+              600: "#2563eb", 700: "#1d4ed8", 800: "#1e3a8a", 900: "#0f172a"
+            }
+          },
+          fontFamily: { sans: ["Outfit", "sans-serif"] }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* ── Base ── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { font-family: "Outfit", sans-serif; background: #f8fbff; color: #0f172a; }
+
+    /* ── Scroll-reveal ── */
+    [data-reveal] {
+      opacity: 0;
+      transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .7s cubic-bezier(.16,1,.3,1);
+    }
+    [data-reveal="up"]    { transform: translateY(40px); }
+    [data-reveal="left"]  { transform: translateX(-40px); }
+    [data-reveal="right"] { transform: translateX(40px); }
+    [data-reveal="scale"] { transform: scale(.94); }
+    [data-reveal="fade"]  { transform: none; }
+    [data-reveal].visible { opacity: 1; transform: none; }
+    [data-delay="1"] { transition-delay: .1s; }
+    [data-delay="2"] { transition-delay: .2s; }
+    [data-delay="3"] { transition-delay: .3s; }
+    [data-delay="4"] { transition-delay: .4s; }
+    [data-delay="5"] { transition-delay: .5s; }
+    [data-delay="6"] { transition-delay: .6s; }
+
+    /* ── Navbar ── */
+    #nav-root {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+      padding: 1.1rem 0;
+      background: transparent;
+      transition: background .4s ease, padding .3s ease, box-shadow .4s ease;
+    }
+    #nav-root.scrolled {
+      background: #0f172a;
+      padding: .5rem 0;
+      box-shadow: 0 4px 32px rgba(0,0,0,.3);
+    }
+    .nav-pill {
+      background: #fff;
+      border: none;
+      border-radius: 9999px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .65rem 1.5rem;
+      box-shadow: 0 4px 28px rgba(0,0,0,.13);
+      transition: background .4s ease, box-shadow .4s ease, border .4s ease;
+    }
+    #nav-root.scrolled .nav-pill {
+      background: #162237;
+      border: 1px solid rgba(255,255,255,.09);
+      box-shadow: none;
+    }
+    .nav-link {
+      color: #1e293b;
+      font-size: .875rem; font-weight: 500;
+      text-decoration: none;
+      padding: .35rem .15rem;
+      position: relative;
+      transition: color .2s;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: #1d4ed8;
+      border-radius: 2px;
+      transition: width .25s ease;
+    }
+    .nav-link:hover { color: #1d4ed8; }
+    .nav-link:hover::after { width: 100%; }
+    #nav-root.scrolled .nav-link { color: rgba(255,255,255,.78); }
+    #nav-root.scrolled .nav-link:hover { color: #fff; }
+    #nav-root.scrolled .nav-link::after { background: #60a5fa; }
+
+    /* Logo text transitions */
+    .logo-name { color: #0f172a; transition: color .4s; }
+    .logo-sub  { color: #3b82f6; transition: color .4s; }
+    #nav-root.scrolled .logo-name { color: #fff; }
+    #nav-root.scrolled .logo-sub  { color: #93c5fd; }
+
+    .nav-cta {
+      background: #1d4ed8;
+      color: #fff; font-weight: 700; font-size: .875rem;
+      padding: .55rem 1.35rem;
+      border-radius: 9999px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background .2s, transform .18s, box-shadow .2s;
+      box-shadow: 0 4px 18px rgba(29,78,216,.35);
+    }
+    .nav-cta:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(29,78,216,.45); }
+
+    /* Mobile drawer */
+    #mobile-drawer {
+      background: #0c1628;
+      border-top: 1px solid rgba(255,255,255,.07);
+      max-height: 0; overflow: hidden;
+      transition: max-height .38s cubic-bezier(.16,1,.3,1);
+    }
+    #mobile-drawer.open { max-height: 500px; }
+    #mobile-drawer a {
+      display: block; padding: .9rem 1.5rem;
+      color: rgba(255,255,255,.78); font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      text-decoration: none; transition: color .15s, background .15s;
+    }
+    #mobile-drawer a:hover { color: #fff; background: rgba(255,255,255,.04); }
+    #mobile-drawer .drawer-cta {
+      display: block; margin: 1rem 1.5rem 1.25rem;
+      background: #1d4ed8; color: #fff; font-weight: 700;
+      text-align: center; border-radius: 9999px; padding: .8rem 1.5rem;
+      text-decoration: none;
+    }
+
+    /* Hamburger lines */
+    .hb-line {
+      display: block; width: 20px; height: 2px;
+      background: #1e293b;
+      border-radius: 2px;
+      transition: transform .3s, opacity .3s, background .4s;
+    }
+    #nav-root.scrolled .hb-line { background: rgba(255,255,255,.8); }
+    .hb-wrap { display: flex; flex-direction: column; gap: 5px; padding: 6px; cursor: pointer; background: none; border: none; }
+    #main-nav-toggle.open .hb-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    #main-nav-toggle.open .hb-line:nth-child(2) { opacity: 0; }
+    #main-nav-toggle.open .hb-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ── Hero animated blobs ── */
+    @keyframes blob1 { 0%,100%{transform:translate(0,0)scale(1)} 40%{transform:translate(40px,-28px)scale(1.12)} 70%{transform:translate(-18px,32px)scale(.94)} }
+    @keyframes blob2 { 0%,100%{transform:translate(0,0)scale(1)} 35%{transform:translate(-30px,22px)scale(1.07)} 68%{transform:translate(24px,-18px)scale(1.1)} }
+    @keyframes blob3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(18px,18px)} }
+    .blob-1 { animation: blob1 14s ease-in-out infinite; }
+    .blob-2 { animation: blob2 16s ease-in-out infinite; }
+    .blob-3 { animation: blob3 10s ease-in-out infinite; }
+
+    /* Hero text shimmer on h1 */
+    @keyframes shimmer {
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18);
+      border-radius: 9999px; padding: .4rem 1rem;
+      font-size: .82rem; font-weight: 500; color: #bfdbfe;
+    }
+
+    /* ── Cards ── */
+    .card {
+      transition: transform .32s cubic-bezier(.16,1,.3,1), box-shadow .32s ease;
+      will-change: transform;
+    }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 28px 60px -12px rgba(29,78,216,.18); }
+
+    /* Image hover zoom */
+    .img-wrap { overflow: hidden; border-radius: 1rem; }
+    .img-wrap img { transition: transform .55s cubic-bezier(.16,1,.3,1); display: block; width: 100%; }
+    .img-wrap:hover img { transform: scale(1.06); }
+
+    /* ── Buttons ── */
+    .btn-white {
+      background: #fff; color: #1d4ed8; font-weight: 700;
+      padding: .85rem 2rem; border-radius: 9999px;
+      text-decoration: none; display: inline-block;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 20px rgba(0,0,0,.12);
+    }
+    .btn-white:hover { background: #eff6ff; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,.15); }
+
+    .btn-ghost {
+      background: rgba(255,255,255,.12); color: #fff; font-weight: 600;
+      padding: .85rem 2rem; border-radius: 9999px;
+      text-decoration: none; display: inline-block; border: 1px solid rgba(255,255,255,.22);
+      transition: background .2s, transform .2s;
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,.2); transform: translateY(-2px); }
+
+    .btn-blue {
+      background: #1d4ed8; color: #fff; font-weight: 700;
+      padding: .85rem 2rem; border-radius: 9999px;
+      text-decoration: none; display: inline-block;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      box-shadow: 0 4px 20px rgba(29,78,216,.3);
+    }
+    .btn-blue:hover { background: #2563eb; transform: translateY(-2px); box-shadow: 0 8px 32px rgba(29,78,216,.4); }
+
+    /* ── Section label pill ── */
+    .section-label {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: #dbeafe; color: #1d4ed8;
+      font-size: .8rem; font-weight: 700; letter-spacing: .04em;
+      padding: .4rem 1rem; border-radius: 9999px;
+      text-transform: uppercase;
+    }
+
+    /* ── Stats ── */
+    .stat-card {
+      background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.14);
+      border-radius: 1.25rem; padding: 1.1rem 1.25rem;
+    }
+
+    /* ── Service card image overlay ── */
+    .service-img-wrap { position: relative; overflow: hidden; border-radius: 1.25rem; }
+    .service-img-wrap img { width: 100%; height: 220px; object-fit: cover; transition: transform .5s cubic-bezier(.16,1,.3,1); display: block; }
+    .service-card:hover .service-img-wrap img { transform: scale(1.07); }
+    .service-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 55%;
+      background: linear-gradient(to top, rgba(15,23,42,.65), transparent);
+      border-radius: 0 0 1.25rem 1.25rem;
+    }
+
+    /* ── Process step connector ── */
+    .step-line { position: absolute; left: 1.875rem; top: 4.5rem; bottom: -1.25rem; width: 2px; background: rgba(255,255,255,.12); }
+
+    /* ── Feature check pill ── */
+    .check-pill {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: #fff; color: #1d4ed8; font-size: .82rem; font-weight: 600;
+      padding: .5rem 1rem; border-radius: 9999px;
+      box-shadow: 0 2px 12px rgba(29,78,216,.1);
+      border: 1px solid #dbeafe;
+    }
+
+    /* ── Form ── */
+    .form-field {
+      width: 100%; padding: .9rem 1.25rem;
+      border: 1.5px solid #dbeafe; border-radius: 1rem;
+      background: #fff; font-size: .95rem; color: #0f172a; font-family: inherit;
+      outline: none; transition: border-color .22s, box-shadow .22s;
+    }
+    .form-field:focus { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59,130,246,.12); }
+    .form-field::placeholder { color: #94a3b8; }
+
+    /* ── Footer gradient line ── */
+    .footer-line { height: 1px; background: linear-gradient(to right, transparent, #dbeafe 30%, #dbeafe 70%, transparent); }
+
+    /* ── Glass ── */
+    .glass { backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+
+    /* ── Mobile sticky bar ── */
+    #mobile-bar { display: none; }
+    @media (max-width: 639px) { #mobile-bar { display: grid; } }
+
+    /* ── Responsive misc ── */
+    @media (max-width: 1023px) { .process-img { display: none; } }
+    @media (max-width: 767px)  { .about-img { min-height: 280px; } }
+  </style>
+</head>
+
+<body>
+
+<!-- ════════════════════════════════════════════
+     NAVBAR
+════════════════════════════════════════════ -->
+<nav id="nav-root">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="nav-pill">
+
+      <!-- Logo -->
+      <a href="#home" style="display:flex;align-items:center;gap:.75rem;text-decoration:none;flex-shrink:0;">
+        <span style="display:flex;align-items:center;justify-content:center;width:2.25rem;height:2.25rem;background:linear-gradient(135deg,#1d4ed8,#3b82f6);border-radius:.75rem;flex-shrink:0;">
+          <i class="fa-solid fa-wave-square" style="color:#fff;font-size:.8rem;"></i>
+        </span>
+        <div style="line-height:1.15;">
+          <p class="logo-name" style="font-size:.95rem;font-weight:800;letter-spacing:-.01em;">THAMES PHYSIO</p>
+          <p class="logo-sub" style="font-size:.6rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;display:none;" class="sm:block">Services</p>
+        </div>
+      </a>
+
+      <!-- Desktop links -->
+      <div class="hidden lg:flex" style="gap:2rem;align-items:center;">
+        <a href="#home"     class="nav-link">Home</a>
+        <a href="#about"    class="nav-link">About</a>
+        <a href="#services" class="nav-link">Services</a>
+        <a href="#process"  class="nav-link">How We Work</a>
+        <a href="#contact"  class="nav-link">Contact</a>
+      </div>
+
+      <!-- Right -->
+      <div style="display:flex;align-items:center;gap:.75rem;">
+        <a href="#book" class="nav-cta hidden sm:inline-block">Book Appointment</a>
+        <button id="main-nav-toggle" class="hb-wrap lg:hidden" aria-label="Menu">
+          <span class="hb-line"></span>
+          <span class="hb-line"></span>
+          <span class="hb-line"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile drawer -->
+  <div id="mobile-drawer">
+    <a href="#home"     onclick="closeNav()">Home</a>
+    <a href="#about"    onclick="closeNav()">About</a>
+    <a href="#services" onclick="closeNav()">Services</a>
+    <a href="#process"  onclick="closeNav()">How We Work</a>
+    <a href="#contact"  onclick="closeNav()">Contact</a>
+    <a href="#book" class="drawer-cta" onclick="closeNav()">Book Appointment</a>
+  </div>
+</nav>
+
+
+<!-- ════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════ -->
+<section id="home" style="position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+
+  <!-- Background image -->
+  <div style="position:absolute;inset:0;background-image:url('https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1920&q=80');background-size:cover;background-position:center;"></div>
+  <!-- Dark blue overlay -->
+  <div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(10,18,46,.92) 0%,rgba(15,30,80,.88) 50%,rgba(10,22,60,.9) 100%);"></div>
+  <!-- Subtle blue radial glow -->
+  <div style="position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:60vw;height:60vw;max-width:700px;max-height:700px;background:radial-gradient(circle,rgba(37,99,235,.18),transparent 65%);pointer-events:none;"></div>
+
+  <!-- ── Left decorative: spine/body illustration ── -->
+  <div class="hero-deco-left" style="position:absolute;left:2%;top:50%;transform:translateY(-50%);pointer-events:none;opacity:.55;">
+    <svg width="180" height="460" viewBox="0 0 180 460" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Head -->
+      <circle cx="90" cy="58" r="42" stroke="rgba(147,197,253,.45)" stroke-width="1.5"/>
+      <!-- Neck -->
+      <line x1="78" y1="98" x2="78" y2="115" stroke="rgba(147,197,253,.3)" stroke-width="1.5"/>
+      <line x1="102" y1="98" x2="102" y2="115" stroke="rgba(147,197,253,.3)" stroke-width="1.5"/>
+      <!-- Shoulders -->
+      <path d="M20 138 Q45 118 78 115 L102 115 Q135 118 160 138" stroke="rgba(147,197,253,.3)" stroke-width="1.5" fill="none"/>
+      <!-- Torso -->
+      <path d="M28 145 L18 280 Q50 302 90 305 Q130 302 162 280 L152 145" stroke="rgba(147,197,253,.22)" stroke-width="1.5" fill="rgba(59,130,246,.04)"/>
+      <!-- Arms -->
+      <path d="M28 145 Q6 200 12 275 L28 268" stroke="rgba(147,197,253,.18)" stroke-width="1.5" fill="none"/>
+      <path d="M152 145 Q174 200 168 275 L152 268" stroke="rgba(147,197,253,.18)" stroke-width="1.5" fill="none"/>
+      <!-- Pelvis -->
+      <path d="M38 295 Q62 330 90 334 Q118 330 142 295" stroke="rgba(147,197,253,.22)" stroke-width="1.5" fill="none"/>
+      <!-- Legs (outline) -->
+      <line x1="68" y1="334" x2="58" y2="445" stroke="rgba(147,197,253,.15)" stroke-width="1.5"/>
+      <line x1="112" y1="334" x2="122" y2="445" stroke="rgba(147,197,253,.15)" stroke-width="1.5"/>
+      <!-- Spine line -->
+      <line x1="90" y1="113" x2="90" y2="336" stroke="rgba(147,197,253,.55)" stroke-width="1.8"/>
+      <!-- Vertebrae discs -->
+      <rect x="79" y="122" width="22" height="8" rx="2" fill="rgba(147,197,253,.5)"/>
+      <rect x="79" y="140" width="22" height="8" rx="2" fill="rgba(147,197,253,.45)"/>
+      <rect x="79" y="158" width="22" height="8" rx="2" fill="rgba(147,197,253,.42)"/>
+      <rect x="79" y="176" width="22" height="8" rx="2" fill="rgba(147,197,253,.38)"/>
+      <rect x="79" y="194" width="22" height="8" rx="2" fill="rgba(147,197,253,.35)"/>
+      <rect x="79" y="212" width="22" height="8" rx="2" fill="rgba(147,197,253,.32)"/>
+      <rect x="79" y="230" width="22" height="8" rx="2" fill="rgba(147,197,253,.3)"/>
+      <!-- Highlighted disc (problem area) -->
+      <rect x="75" y="248" width="30" height="10" rx="3" fill="rgba(239,68,68,.65)"/>
+      <rect x="79" y="268" width="22" height="8" rx="2" fill="rgba(147,197,253,.25)"/>
+      <rect x="79" y="286" width="22" height="8" rx="2" fill="rgba(147,197,253,.22)"/>
+      <rect x="79" y="304" width="22" height="8" rx="2" fill="rgba(147,197,253,.18)"/>
+      <!-- Glow dot at problem disc -->
+      <circle cx="90" cy="253" r="18" fill="rgba(239,68,68,.08)"/>
+      <circle cx="90" cy="253" r="10" fill="rgba(239,68,68,.12)"/>
+    </svg>
+  </div>
+
+  <!-- ── Right decorative: hands + spine ── -->
+  <div class="hero-deco-right" style="position:absolute;right:2%;top:50%;transform:translateY(-50%);pointer-events:none;opacity:.5;">
+    <svg width="190" height="400" viewBox="0 0 190 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Left hand curve -->
+      <path d="M18 200 Q8 110 72 62 Q84 56 88 70 L88 200" stroke="rgba(147,197,253,.45)" stroke-width="2" fill="rgba(59,130,246,.04)"/>
+      <path d="M18 200 Q12 292 76 338 Q86 344 88 330 L88 200" stroke="rgba(147,197,253,.4)" stroke-width="2" fill="rgba(59,130,246,.04)"/>
+      <!-- Right hand curve -->
+      <path d="M172 200 Q182 110 118 62 Q106 56 102 70 L102 200" stroke="rgba(147,197,253,.45)" stroke-width="2" fill="rgba(59,130,246,.04)"/>
+      <path d="M172 200 Q178 292 114 338 Q104 344 102 330 L102 200" stroke="rgba(147,197,253,.4)" stroke-width="2" fill="rgba(59,130,246,.04)"/>
+      <!-- Fingers left (top) -->
+      <path d="M36 100 Q22 72 34 50" stroke="rgba(147,197,253,.3)" stroke-width="1.5" fill="none"/>
+      <path d="M50 80 Q42 50 56 30" stroke="rgba(147,197,253,.25)" stroke-width="1.5" fill="none"/>
+      <!-- Fingers right (top) -->
+      <path d="M154 100 Q168 72 156 50" stroke="rgba(147,197,253,.3)" stroke-width="1.5" fill="none"/>
+      <path d="M140 80 Q148 50 134 30" stroke="rgba(147,197,253,.25)" stroke-width="1.5" fill="none"/>
+      <!-- Fingers left (bottom) -->
+      <path d="M36 300 Q22 328 34 350" stroke="rgba(147,197,253,.3)" stroke-width="1.5" fill="none"/>
+      <path d="M50 318 Q42 350 56 370" stroke="rgba(147,197,253,.25)" stroke-width="1.5" fill="none"/>
+      <!-- Fingers right (bottom) -->
+      <path d="M154 300 Q168 328 156 350" stroke="rgba(147,197,253,.3)" stroke-width="1.5" fill="none"/>
+      <path d="M140 318 Q148 350 134 370" stroke="rgba(147,197,253,.25)" stroke-width="1.5" fill="none"/>
+      <!-- Vertical spine connector -->
+      <line x1="95" y1="62" x2="95" y2="338" stroke="rgba(147,197,253,.2)" stroke-width="1" stroke-dasharray="3,6"/>
+      <!-- Spine dots -->
+      <circle cx="95" cy="75"  r="7.5" fill="rgba(96,165,250,.7)"/>
+      <circle cx="95" cy="105" r="6.5" fill="rgba(96,165,250,.62)"/>
+      <circle cx="95" cy="133" r="6.5" fill="rgba(96,165,250,.56)"/>
+      <circle cx="95" cy="161" r="6.5" fill="rgba(96,165,250,.5)"/>
+      <circle cx="95" cy="189" r="6.5" fill="rgba(96,165,250,.45)"/>
+      <circle cx="95" cy="200" r="8"   fill="rgba(59,130,246,.8)"/><!-- center highlight -->
+      <circle cx="95" cy="211" r="6.5" fill="rgba(96,165,250,.45)"/>
+      <circle cx="95" cy="239" r="6.5" fill="rgba(96,165,250,.42)"/>
+      <circle cx="95" cy="267" r="6.5" fill="rgba(96,165,250,.38)"/>
+      <circle cx="95" cy="295" r="6.5" fill="rgba(96,165,250,.34)"/>
+      <circle cx="95" cy="323" r="7.5" fill="rgba(96,165,250,.6)"/>
+    </svg>
+  </div>
+
+  <!-- ── Centered hero content ── -->
+  <div style="position:relative;z-index:2;text-align:center;padding:6rem 1.5rem 4rem;max-width:52rem;width:100%;margin:0 auto;">
+
+    <!-- Badge -->
+    <div data-reveal="fade" style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:9999px;padding:.45rem 1.1rem;margin-bottom:1.75rem;">
+      <i class="fa-solid fa-heart-pulse" style="color:#93c5fd;font-size:.8rem;"></i>
+      <span style="font-size:.82rem;font-weight:500;color:#bfdbfe;letter-spacing:.02em;">Feel Better, Move Freely, Live Fully</span>
+    </div>
+
+    <!-- Heading -->
+    <h1 data-reveal="up" data-delay="1" style="font-size:clamp(2.4rem,6vw,4.2rem);font-weight:900;line-height:1.07;color:#fff;letter-spacing:-.03em;margin:0 0 1.5rem;">
+      Reclaim Your Strength<br>With Expert Physiotherapy
+    </h1>
+
+    <!-- Subtitle -->
+    <p data-reveal="up" data-delay="2" style="font-size:clamp(1rem,2vw,1.15rem);line-height:1.8;color:rgba(191,219,254,.88);max-width:36rem;margin:0 auto 2.5rem;">
+      Personalized physiotherapy for pain relief, mobility improvement, posture correction, and full rehabilitation serving Twickenham and surrounding areas.
+    </p>
+
+    <!-- Buttons -->
+    <div data-reveal="up" data-delay="3" style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;">
+      <a href="#book"     class="btn-white" style="font-size:.95rem;padding:.9rem 2.2rem;">
+        <i class="fa-solid fa-calendar-check" style="margin-right:.5rem;"></i>Book an Appointment
+      </a>
+      <a href="#services" class="btn-ghost"  style="font-size:.95rem;padding:.9rem 2.2rem;">
+        Schedule A Session
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Wave divider -->
+  <div style="position:absolute;bottom:-1px;left:0;right:0;line-height:0;">
+    <svg viewBox="0 0 1440 70" preserveAspectRatio="none" style="width:100%;height:70px;display:block;">
+      <path d="M0,40 C360,70 1080,10 1440,40 L1440,70 L0,70 Z" fill="#f8fbff"/>
+    </svg>
+  </div>
+</section>
+
+<style>
+  @media (max-width: 900px) {
+    .hero-deco-left, .hero-deco-right { display: none; }
+  }
+</style>
+
+
+<!-- ════════════════════════════════════════════
+     ABOUT
+════════════════════════════════════════════ -->
+<section id="about" style="background:#f8fbff;padding:5rem 0 6rem;">
+  <div class="mx-auto max-w-7xl px-5 lg:px-8">
+    <div style="display:grid;grid-template-columns:1fr;gap:3.5rem;align-items:center;" class="lg:about-grid">
+
+      <!-- Image -->
+      <div data-reveal="left" style="position:relative;">
+        <div style="position:absolute;top:-20px;left:-20px;width:180px;height:180px;background:#dbeafe;border-radius:9999px;filter:blur(50px);pointer-events:none;"></div>
+        <div style="position:absolute;bottom:-16px;right:-16px;width:120px;height:120px;background:#bfdbfe;border-radius:9999px;filter:blur(40px);pointer-events:none;"></div>
+        <div class="img-wrap about-img" style="border-radius:2rem;min-height:360px;">
+          <img src="https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&w=1200&q=80"
+               alt="Physio therapist with patient" style="height:100%;min-height:360px;object-fit:cover;">
+        </div>
+        <!-- Floating stat -->
+        <div style="position:absolute;bottom:1.5rem;right:-1rem;background:#1d4ed8;color:#fff;border-radius:1.25rem;padding:1rem 1.4rem;box-shadow:0 12px 36px rgba(29,78,216,.35);" class="hidden sm:block">
+          <p style="font-size:1.9rem;font-weight:800;line-height:1;">500+</p>
+          <p style="font-size:.75rem;font-weight:500;color:#93c5fd;margin-top:.2rem;">Patients Treated</p>
+        </div>
+      </div>
+
+      <!-- Text -->
+      <div data-reveal="right">
+        <div class="section-label"><i class="fa-solid fa-circle-check"></i> About Us</div>
+        <h2 style="font-size:clamp(1.9rem,3.5vw,2.8rem);font-weight:800;line-height:1.15;color:#0f172a;margin:.9rem 0 1.25rem;letter-spacing:-.02em;">
+          Modern treatment with<br>personal care at every stage.
+        </h2>
+        <p style="font-size:1rem;line-height:1.8;color:#475569;margin-bottom:1.75rem;">
+          Thames Physio Services combines clinical expertise with a calm, patient-centered experience. We help reduce pain, rebuild confidence in movement, and support long-term progress through thoughtful treatment tailored to your body, goals, and daily routine.
+        </p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.75rem;">
+          <div style="background:#fff;border:1.5px solid #dbeafe;border-radius:1.25rem;padding:1.25rem;box-shadow:0 2px 12px rgba(29,78,216,.06);">
+            <div style="width:2.25rem;height:2.25rem;background:#dbeafe;border-radius:.75rem;display:flex;align-items:center;justify-content:center;margin-bottom:.75rem;">
+              <i class="fa-solid fa-microscope" style="color:#1d4ed8;font-size:.9rem;"></i>
+            </div>
+            <h3 style="font-size:1rem;font-weight:700;color:#0f172a;margin-bottom:.4rem;">Science-led care</h3>
+            <p style="font-size:.85rem;line-height:1.6;color:#64748b;">Assessment and tracking built on evidence-based practice.</p>
+          </div>
+          <div style="background:#fff;border:1.5px solid #dbeafe;border-radius:1.25rem;padding:1.25rem;box-shadow:0 2px 12px rgba(29,78,216,.06);">
+            <div style="width:2.25rem;height:2.25rem;background:#dbeafe;border-radius:.75rem;display:flex;align-items:center;justify-content:center;margin-bottom:.75rem;">
+              <i class="fa-solid fa-calendar-check" style="color:#1d4ed8;font-size:.9rem;"></i>
+            </div>
+            <h3 style="font-size:1rem;font-weight:700;color:#0f172a;margin-bottom:.4rem;">Flexible support</h3>
+            <p style="font-size:.85rem;line-height:1.6;color:#64748b;">Clinic, home, and care home services for easier access.</p>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:.6rem;">
+          <span class="check-pill"><i class="fa-solid fa-check" style="color:#2563eb;font-size:.75rem;"></i> Sports injury rehab</span>
+          <span class="check-pill"><i class="fa-solid fa-check" style="color:#2563eb;font-size:.75rem;"></i> Post-surgery recovery</span>
+          <span class="check-pill"><i class="fa-solid fa-check" style="color:#2563eb;font-size:.75rem;"></i> Pain &amp; mobility care</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════
+     SERVICES
+════════════════════════════════════════════ -->
+<section id="services" style="background:#fff;padding:6rem 0;">
+  <div class="mx-auto max-w-7xl px-5 lg:px-8">
+
+    <!-- Header -->
+    <div style="text-align:center;max-width:36rem;margin:0 auto 3.5rem;" data-reveal="up">
+      <div class="section-label" style="margin:0 auto .9rem;width:fit-content;"><i class="fa-solid fa-briefcase-medical"></i> Our Services</div>
+      <h2 style="font-size:clamp(1.9rem,3.5vw,2.8rem);font-weight:800;color:#0f172a;letter-spacing:-.02em;line-height:1.15;margin-bottom:1rem;">
+        Therapy that adapts to you,<br>not the other way around.
+      </h2>
+      <p style="font-size:1rem;line-height:1.75;color:#64748b;">Clear pathways for rehabilitation, pain management, and long-term physical well-being.</p>
+    </div>
+
+    <!-- Cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;">
+
+      <div class="card service-card" data-reveal="up" data-delay="1" style="background:#f8fbff;border:1.5px solid #dbeafe;border-radius:1.75rem;padding:1.1rem;overflow:hidden;">
+        <div class="service-img-wrap">
+          <img src="https://images.unsplash.com/photo-1597764699519-5335b7f8f91b?auto=format&fit=crop&w=900&q=80" alt="Physiotherapy">
+          <div class="service-overlay"></div>
+        </div>
+        <div style="padding:1.25rem .5rem .5rem;">
+          <div style="width:2.5rem;height:2.5rem;background:#dbeafe;border-radius:.75rem;display:flex;align-items:center;justify-content:center;margin-bottom:.75rem;">
+            <i class="fa-solid fa-person-walking" style="color:#1d4ed8;"></i>
+          </div>
+          <h3 style="font-size:1.2rem;font-weight:800;color:#0f172a;margin-bottom:.5rem;">Physiotherapy</h3>
+          <p style="font-size:.875rem;line-height:1.7;color:#64748b;">Restore strength, reduce pain, and improve movement after injury, strain, or ongoing discomfort.</p>
+        </div>
+      </div>
+
+      <div class="card service-card" data-reveal="up" data-delay="2" style="background:#f8fbff;border:1.5px solid #dbeafe;border-radius:1.75rem;padding:1.1rem;overflow:hidden;">
+        <div class="service-img-wrap">
+          <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=900&q=80" alt="Post-Surgery Rehab">
+          <div class="service-overlay"></div>
+        </div>
+        <div style="padding:1.25rem .5rem .5rem;">
+          <div style="width:2.5rem;height:2.5rem;background:#dbeafe;border-radius:.75rem;display:flex;align-items:center;justify-content:center;margin-bottom:.75rem;">
+            <i class="fa-solid fa-kit-medical" style="color:#1d4ed8;"></i>
+          </div>
+          <h3 style="font-size:1.2rem;font-weight:800;color:#0f172a;margin-bottom:.5rem;">Post-Surgery Rehab</h3>
+          <p style="font-size:.875rem;line-height:1.7;color:#64748b;">Step-by-step support to rebuild mobility, confidence, and function after operations.</p>
+        </div>
+      </div>
+
+      <div class="card service-card" data-reveal="up" data-delay="3" style="background:#f8fbff;border:1.5px solid #dbeafe;border-radius:1.75rem;padding:1.1rem;overflow:hidden;">
+        <div class="service-img-wrap">
+          <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?auto=format&fit=crop&w=900&q=80" alt="Chiropractic Care">
+          <div class="service-overlay"></div>
+        </div>
+        <div style="padding:1.25rem .5rem .5rem;">
+          <div style="width:2.5rem;height:2.5rem;background:#dbeafe;border-radius:.75rem;display:flex;align-items:center;justify-content:center;margin-bottom:.75rem;">
+            <i class="fa-solid fa-bone" style="color:#1d4ed8;"></i>
+          </div>
+          <h3 style="font-size:1.2rem;font-weight:800;color:#0f172a;margin-bottom:.5rem;">Chiropractic Care</h3>
+          <p style="font-size:.875rem;line-height:1.7;color:#64748b;">Hands-on treatment focused on spinal alignment, posture, and joint function for everyday comfort.</p>
+        </div>
+      </div>
+
+      <div class="card service-card" data-reveal="up" data-delay="4" style="background:#f8fbff;border:1.5px solid #dbeafe;border-radius:1.75rem;padding:1.1rem;overflow:hidden;">
+        <div class="service-img-wrap">
+          <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=900&q=80" alt="Sports Rehab">
+          <div class="service-overlay"></div>
+        </div>
+        <div style="padding:1.25rem .5rem .5rem;">
+          <div style="width:2.5rem;height:2.5rem;background:#dbeafe;border-radius:.75rem;display:flex;align-items:center;justify-content:center;margin-bottom:.75rem;">
+            <i class="fa-solid fa-person-running" style="color:#1d4ed8;"></i>
+          </div>
+          <h3 style="font-size:1.2rem;font-weight:800;color:#0f172a;margin-bottom:.5rem;">Sports Rehab</h3>
+          <p style="font-size:.875rem;line-height:1.7;color:#64748b;">Targeted treatment plans to help active clients return safely to performance and training.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════
+     HOW WE WORK
+════════════════════════════════════════════ -->
+<section id="process" style="position:relative;overflow:hidden;background:linear-gradient(135deg,#0f172a,#1e3a8a 60%,#1d4ed8 100%);padding:6rem 0;">
+  <!-- Decorative rings -->
+  <div style="position:absolute;top:-60px;left:-60px;width:400px;height:400px;border-radius:9999px;border:1px solid rgba(255,255,255,.06);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-80px;right:-40px;width:480px;height:480px;border-radius:9999px;border:1px solid rgba(255,255,255,.06);pointer-events:none;"></div>
+
+  <div class="mx-auto max-w-7xl px-5 lg:px-8" style="position:relative;">
+    <div style="display:grid;grid-template-columns:1fr;gap:3.5rem;align-items:center;" class="lg:process-grid">
+
+      <!-- Image -->
+      <div class="process-img" data-reveal="left" style="position:relative;">
+        <div style="position:absolute;inset:-12px;background:rgba(59,130,246,.15);border-radius:2.25rem;transform:rotate(-2deg);"></div>
+        <div class="img-wrap" style="position:relative;border-radius:2rem;min-height:480px;">
+          <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=1200&q=80"
+               alt="Treatment session" style="height:480px;object-fit:cover;">
+        </div>
+      </div>
+
+      <!-- Steps -->
+      <div data-reveal="right">
+        <div class="section-label" style="background:rgba(255,255,255,.1);color:#bfdbfe;"><i class="fa-solid fa-stethoscope"></i> How We Work</div>
+        <h2 style="font-size:clamp(1.9rem,3.5vw,2.8rem);font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.15;margin:.9rem 0 2rem;">
+          From first assessment to<br>long-term recovery.
+        </h2>
+
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+
+          <div data-reveal="up" data-delay="1" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:1.5rem;padding:1.4rem 1.5rem;display:flex;gap:1.1rem;align-items:flex-start;transition:background .2s;" onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">
+            <div style="width:3.25rem;height:3.25rem;flex-shrink:0;background:rgba(59,130,246,.25);border-radius:1rem;display:flex;align-items:center;justify-content:center;">
+              <i class="fa-solid fa-clipboard-list" style="color:#93c5fd;font-size:1.1rem;"></i>
+            </div>
+            <div>
+              <p style="font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#60a5fa;margin-bottom:.35rem;">Step 01</p>
+              <h3 style="font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:.4rem;">Detailed Assessment</h3>
+              <p style="font-size:.88rem;line-height:1.7;color:rgba(191,219,254,.85);">We listen closely, assess movement patterns, and identify the source of pain before building your plan.</p>
+            </div>
+          </div>
+
+          <div data-reveal="up" data-delay="2" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:1.5rem;padding:1.4rem 1.5rem;display:flex;gap:1.1rem;align-items:flex-start;transition:background .2s;" onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">
+            <div style="width:3.25rem;height:3.25rem;flex-shrink:0;background:rgba(59,130,246,.25);border-radius:1rem;display:flex;align-items:center;justify-content:center;">
+              <i class="fa-solid fa-hands" style="color:#93c5fd;font-size:1.1rem;"></i>
+            </div>
+            <div>
+              <p style="font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#60a5fa;margin-bottom:.35rem;">Step 02</p>
+              <h3 style="font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:.4rem;">Personalized Treatment</h3>
+              <p style="font-size:.88rem;line-height:1.7;color:rgba(191,219,254,.85);">Hands-on therapy, corrective exercises, and practical strategies matched to your condition and lifestyle.</p>
+            </div>
+          </div>
+
+          <div data-reveal="up" data-delay="3" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:1.5rem;padding:1.4rem 1.5rem;display:flex;gap:1.1rem;align-items:flex-start;transition:background .2s;" onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background='rgba(255,255,255,.06)'">
+            <div style="width:3.25rem;height:3.25rem;flex-shrink:0;background:rgba(59,130,246,.25);border-radius:1rem;display:flex;align-items:center;justify-content:center;">
+              <i class="fa-solid fa-chart-line" style="color:#93c5fd;font-size:1.1rem;"></i>
+            </div>
+            <div>
+              <p style="font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#60a5fa;margin-bottom:.35rem;">Step 03</p>
+              <h3 style="font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:.4rem;">Progress &amp; Prevention</h3>
+              <p style="font-size:.88rem;line-height:1.7;color:rgba(191,219,254,.85);">We monitor outcomes, refine treatment, and help you maintain results through stronger movement habits.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wave divider bottom -->
+  <div style="position:absolute;bottom:-1px;left:0;right:0;line-height:0;">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style="width:100%;height:60px;display:block;">
+      <path d="M0,0 C480,60 960,60 1440,0 L1440,60 L0,60 Z" fill="#f8fbff"/>
+    </svg>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════
+     WHO WE HELP + DELIVERY
+════════════════════════════════════════════ -->
+<section style="background:#f8fbff;padding:6rem 0;">
+  <div class="mx-auto max-w-7xl px-5 lg:px-8">
+
+    <div style="text-align:center;max-width:34rem;margin:0 auto 3rem;" data-reveal="up">
+      <div class="section-label" style="margin:0 auto .9rem;width:fit-content;"><i class="fa-solid fa-user-group"></i> Who We Help</div>
+      <h2 style="font-size:clamp(1.9rem,3.5vw,2.8rem);font-weight:800;color:#0f172a;letter-spacing:-.02em;line-height:1.15;">
+        Care designed for every stage of life.
+      </h2>
+    </div>
+
+    <!-- Patient type cards -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem;margin-bottom:4rem;">
+      <div class="card" data-reveal="up" data-delay="1" style="background:#fff;border:1.5px solid #dbeafe;border-radius:1.5rem;padding:1.75rem;text-align:center;">
+        <div style="width:3.5rem;height:3.5rem;background:linear-gradient(135deg,#dbeafe,#bfdbfe);border-radius:1rem;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+          <i class="fa-solid fa-child-reaching" style="color:#1d4ed8;font-size:1.3rem;"></i>
+        </div>
+        <h3 style="font-size:1.05rem;font-weight:700;color:#0f172a;margin-bottom:.4rem;">Children</h3>
+        <p style="font-size:.82rem;color:#64748b;line-height:1.6;">Gentle care adapted for younger patients and growing bodies.</p>
+      </div>
+
+      <div class="card" data-reveal="up" data-delay="2" style="background:#fff;border:1.5px solid #dbeafe;border-radius:1.5rem;padding:1.75rem;text-align:center;">
+        <div style="width:3.5rem;height:3.5rem;background:linear-gradient(135deg,#dbeafe,#bfdbfe);border-radius:1rem;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+          <i class="fa-solid fa-person-running" style="color:#1d4ed8;font-size:1.3rem;"></i>
+        </div>
+        <h3 style="font-size:1.05rem;font-weight:700;color:#0f172a;margin-bottom:.4rem;">Athletes</h3>
+        <p style="font-size:.82rem;color:#64748b;line-height:1.6;">Get back to peak performance with targeted sports rehabilitation.</p>
+      </div>
+
+      <div class="card" data-reveal="up" data-delay="3" style="background:#fff;border:1.5px solid #dbeafe;border-radius:1.5rem;padding:1.75rem;text-align:center;">
+        <div style="width:3.5rem;height:3.5rem;background:linear-gradient(135deg,#dbeafe,#bfdbfe);border-radius:1rem;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+          <i class="fa-solid fa-person-pregnant" style="color:#1d4ed8;font-size:1.3rem;"></i>
+        </div>
+        <h3 style="font-size:1.05rem;font-weight:700;color:#0f172a;margin-bottom:.4rem;">Pregnancy Care</h3>
+        <p style="font-size:.82rem;color:#64748b;line-height:1.6;">Supportive therapy through all stages of pregnancy and postpartum recovery.</p>
+      </div>
+
+      <div class="card" data-reveal="up" data-delay="4" style="background:#fff;border:1.5px solid #dbeafe;border-radius:1.5rem;padding:1.75rem;text-align:center;">
+        <div style="width:3.5rem;height:3.5rem;background:linear-gradient(135deg,#dbeafe,#bfdbfe);border-radius:1rem;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+          <i class="fa-solid fa-person-cane" style="color:#1d4ed8;font-size:1.3rem;"></i>
+        </div>
+        <h3 style="font-size:1.05rem;font-weight:700;color:#0f172a;margin-bottom:.4rem;">Elderly</h3>
+        <p style="font-size:.82rem;color:#64748b;line-height:1.6;">Gentle mobility and balance support to maintain independence and comfort.</p>
+      </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="footer-line" style="margin-bottom:3rem;" data-reveal="fade"></div>
+
+    <!-- Delivery methods -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem;">
+      <div class="card" data-reveal="up" data-delay="1" style="background:#fff;border:1.5px solid #dbeafe;border-radius:1.5rem;padding:2rem;display:flex;gap:1.25rem;align-items:flex-start;">
+        <div style="width:3rem;height:3rem;flex-shrink:0;background:linear-gradient(135deg,#1d4ed8,#3b82f6);border-radius:.875rem;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(29,78,216,.3);">
+          <i class="fa-solid fa-house-medical" style="color:#fff;font-size:1rem;"></i>
+        </div>
+        <div>
+          <h3 style="font-size:1.05rem;font-weight:700;color:#0f172a;margin-bottom:.4rem;">Home Visits</h3>
+          <p style="font-size:.85rem;line-height:1.65;color:#64748b;">Comfortable treatment in familiar surroundings for patients with mobility or travel challenges.</p>
+        </div>
+      </div>
+
+
+      <div class="card" data-reveal="up" data-delay="3" style="background:#fff;border:1.5px solid #dbeafe;border-radius:1.5rem;padding:2rem;display:flex;gap:1.25rem;align-items:flex-start;">
+        <div style="width:3rem;height:3rem;flex-shrink:0;background:linear-gradient(135deg,#1d4ed8,#3b82f6);border-radius:.875rem;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 20px rgba(29,78,216,.3);">
+          <i class="fa-solid fa-phone-volume" style="color:#fff;font-size:1rem;"></i>
+        </div>
+        <div>
+          <h3 style="font-size:1.05rem;font-weight:700;color:#0f172a;margin-bottom:.4rem;">Direct Support</h3>
+          <p style="font-size:.85rem;line-height:1.65;color:#64748b;">Fast access to booking and follow-up guidance so patients feel supported between sessions.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════
+     CONTACT + BOOKING
+════════════════════════════════════════════ -->
+<section id="contact" style="background:#fff;padding:6rem 0;">
+  <div class="mx-auto max-w-7xl px-5 lg:px-8">
+    <div style="display:grid;grid-template-columns:1fr;gap:1.5rem;" class="lg:contact-grid">
+
+      <!-- Contact info -->
+      <div data-reveal="left" style="background:#f8fbff;border:1.5px solid #dbeafe;border-radius:2rem;padding:2.5rem;">
+        <div class="section-label"><i class="fa-solid fa-address-book"></i> Contact Us</div>
+        <h2 style="font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;color:#0f172a;letter-spacing:-.02em;line-height:1.2;margin:.9rem 0 1rem;">
+          Just one message away from helping you heal.
+        </h2>
+        <p style="font-size:.95rem;line-height:1.75;color:#475569;margin-bottom:2rem;">
+          Ready to start recovery with a team that listens carefully and builds treatment around your needs?
+        </p>
+
+        <!-- Hours table -->
+        <div style="border:1.5px solid #dbeafe;border-radius:1.25rem;overflow:hidden;margin-bottom:1.75rem;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;background:#dbeafe;">
+            <div style="padding:.9rem 1.25rem;font-weight:700;font-size:.85rem;color:#1d4ed8;border-right:1.5px solid #bfdbfe;">Day</div>
+            <div style="padding:.9rem 1.25rem;font-weight:700;font-size:.85rem;color:#1d4ed8;">Schedule</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1.5px solid #dbeafe;background:#fff;">
+            <div style="padding:.9rem 1.25rem;font-size:.9rem;color:#475569;border-right:1.5px solid #dbeafe;">Mon – Sat</div>
+            <div style="padding:.9rem 1.25rem;font-size:.9rem;font-weight:600;color:#0f172a;">08:00 – 19:00</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;border-top:1.5px solid #dbeafe;background:#fff;">
+            <div style="padding:.9rem 1.25rem;font-size:.9rem;color:#475569;border-right:1.5px solid #dbeafe;">Sunday</div>
+            <div style="padding:.9rem 1.25rem;font-size:.9rem;font-weight:600;color:#94a3b8;">Closed</div>
+          </div>
+        </div>
+
+        <!-- Contact tiles -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.875rem;">
+          <a href="mailto:info@thamesphysio.co.uk" style="background:#fff;border:1.5px solid #dbeafe;border-radius:1.25rem;padding:1.25rem;text-decoration:none;transition:box-shadow .2s,transform .2s;display:block;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 28px rgba(29,78,216,.12)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+            <i class="fa-solid fa-envelope" style="color:#1d4ed8;font-size:1.2rem;"></i>
+            <p style="font-weight:700;color:#0f172a;margin:.6rem 0 .25rem;font-size:.9rem;">Email Us</p>
+            <p style="font-size:.78rem;color:#64748b;word-break:break-all;">info@thamesphysio.co.uk</p>
+          </a>
+          <a href="tel:07745670210" style="background:#fff;border:1.5px solid #dbeafe;border-radius:1.25rem;padding:1.25rem;text-decoration:none;transition:box-shadow .2s,transform .2s;display:block;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 12px 28px rgba(29,78,216,.12)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+            <i class="fa-solid fa-phone" style="color:#1d4ed8;font-size:1.2rem;"></i>
+            <p style="font-weight:700;color:#0f172a;margin:.6rem 0 .25rem;font-size:.9rem;">Call Today</p>
+            <p style="font-size:.78rem;color:#64748b;">07745 670210</p>
+          </a>
+          <div style="background:#fff;border:1.5px solid #dbeafe;border-radius:1.25rem;padding:1.25rem;">
+            <i class="fa-solid fa-location-dot" style="color:#1d4ed8;font-size:1.2rem;"></i>
+            <p style="font-weight:700;color:#0f172a;margin:.6rem 0 .25rem;font-size:.9rem;">Location</p>
+            <p style="font-size:.78rem;color:#64748b;">29–39 London Road, Twickenham</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Booking form -->
+      <div id="book" data-reveal="right" style="background:#f8fbff;border:1.5px solid #dbeafe;border-radius:2rem;padding:2.5rem;">
+        <h3 style="font-size:1.75rem;font-weight:800;color:#0f172a;letter-spacing:-.02em;margin-bottom:.5rem;">Book an Appointment</h3>
+        <p style="font-size:.9rem;color:#64748b;margin-bottom:2rem;">We usually respond within 30 minutes during business hours.</p>
+
+        <form style="display:grid;grid-template-columns:1fr;gap:1rem;" class="sm:form-2col">
+          <input type="text"   placeholder="First Name"     class="form-field">
+          <input type="email"  placeholder="Email Address"  class="form-field">
+          <input type="tel"    placeholder="Phone Number"   class="form-field">
+          <select class="form-field">
+            <option>Service Type</option>
+            <option>Physiotherapy</option>
+            <option>Chiropractic Care</option>
+            <option>Post-Surgery Rehab</option>
+            <option>Home Visit</option>
+          </select>
+          <input type="date" class="form-field">
+          <select class="form-field">
+            <option>Preferred Time</option>
+            <option>Morning</option>
+            <option>Afternoon</option>
+            <option>Evening</option>
+          </select>
+          <textarea placeholder="Tell us about your concern" class="form-field" style="min-height:140px;resize:vertical;grid-column:1/-1;"></textarea>
+          <div style="grid-column:1/-1;display:flex;justify-content:flex-end;">
+            <button type="submit" class="btn-blue" style="font-size:.95rem;">
+              <i class="fa-solid fa-calendar-check" style="margin-right:.5rem;"></i>Schedule A Session
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════ -->
+<footer style="background:#0f172a;padding:3.5rem 0 0;">
+  <div class="mx-auto max-w-7xl px-5 lg:px-8">
+    <div style="display:flex; flex-wrap: wrap; justify-content: space-between; gap:2.5rem; padding-bottom:2.5rem;">
+      
+      <div style="flex: 1; min-width: 250px;">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
+          <span style="display:flex;align-items:center;justify-content:center;width:2.25rem;height:2.25rem;background:linear-gradient(135deg,#1d4ed8,#3b82f6);border-radius:.75rem;">
+            <i class="fa-solid fa-wave-square" style="color:#fff;font-size:.8rem;"></i>
+          </span>
+          <p style="font-size:1rem;font-weight:800;color:#fff;margin:0;">THAMES PHYSIO SERVICES</p>
+        </div>
+        <p style="font-size:.875rem;color:#64748b;line-height:1.7;max-width:26rem;">
+          Professional physiotherapy and chiropractic services for Twickenham patients of all ages. Delivering personalised care with a human touch.
+        </p>
+      </div>
+
+      <div style="flex: 1; min-width: 150px;">
+        <p style="font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#3b82f6;margin-bottom:1rem;">Navigation</p>
+        <div style="display:flex;flex-direction:column;gap:.6rem;">
+          <a href="#about" style="color:#64748b;text-decoration:none;font-size:.875rem;transition:color .18s;" onmouseover="this.style.color='#93c5fd'" onmouseout="this.style.color='#64748b'">About</a>
+          <a href="#services" style="color:#64748b;text-decoration:none;font-size:.875rem;transition:color .18s;" onmouseover="this.style.color='#93c5fd'" onmouseout="this.style.color='#64748b'">Services</a>
+          <a href="#process" style="color:#64748b;text-decoration:none;font-size:.875rem;transition:color .18s;" onmouseover="this.style.color='#93c5fd'" onmouseout="this.style.color='#64748b'">How We Work</a>
+          <a href="#contact" style="color:#64748b;text-decoration:none;font-size:.875rem;transition:color .18s;" onmouseover="this.style.color='#93c5fd'" onmouseout="this.style.color='#64748b'">Contact</a>
+        </div>
+      </div>
+
+      <div style="flex: 1; min-width: 200px;">
+        <p style="font-size:.7rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#3b82f6;margin-bottom:1rem;">Contact</p>
+        <div style="display:flex;flex-direction:column;gap:.75rem;">
+          <p style="color:#64748b;font-size:.875rem;margin:0;"><i class="fa-solid fa-phone" style="color:#3b82f6;margin-right:.5rem;width:1rem;"></i>07745 670210</p>
+          <p style="color:#64748b;font-size:.875rem;margin:0;"><i class="fa-solid fa-envelope" style="color:#3b82f6;margin-right:.5rem;width:1rem;"></i>info@thamesphysio.co.uk</p>
+          <p style="color:#64748b;font-size:.875rem;margin:0;"><i class="fa-solid fa-location-dot" style="color:#3b82f6;margin-right:.5rem;width:1rem;"></i>29–39 London Road, Twickenham</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-line"></div>
+    <div style="padding:1.5rem 0;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.75rem;">
+      <p style="font-size:.8rem;color:#475569;margin:0;">&copy; 2026 Thames Physio Services Limited. All rights reserved.</p>
+      <p style="font-size:.8rem;color:#334155;margin:0;">Twickenham, London, UK</p>
+    </div>
+  </div>
+</footer>
+
+
+<!-- ════════════════════════════════════════════
+     MOBILE STICKY BAR
+════════════════════════════════════════════ -->
+<div id="mobile-bar" style="position:fixed;bottom:0;left:0;right:0;z-index:50;grid-template-columns:1fr 1fr;box-shadow:0 -4px 24px rgba(0,0,0,.12);">
+  <a href="tel:07745670210" style="background:#1e3a8a;color:#fff;font-weight:700;font-size:.875rem;padding:1rem;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:.5rem;">
+    <i class="fa-solid fa-phone"></i> Call Now
+  </a>
+  <a href="#book" style="background:#1d4ed8;color:#fff;font-weight:700;font-size:.875rem;padding:1rem;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:.5rem;">
+    <i class="fa-solid fa-calendar-check"></i> Book Now
+  </a>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     RESPONSIVE GRID OVERRIDES (inline for Tailwind CDN)
+════════════════════════════════════════════ -->
+<style>
+  @media (min-width: 1024px) {
+    .lg\\:about-grid   { grid-template-columns: .9fr 1.1fr !important; }
+    .lg\\:process-grid { grid-template-columns: .85fr 1.15fr !important; }
+    .lg\\:contact-grid { grid-template-columns: .9fr 1.1fr !important; }
+    .lg\\:footer-grid  { grid-template-columns: 1.4fr 1fr 1fr !important; }
+  }
+  @media (min-width: 640px) {
+    .sm\\:footer-grid  { grid-template-columns: 1.4fr 1fr 1fr !important; }
+    .sm\\:form-2col    { grid-template-columns: 1fr 1fr !important; }
+    .sm\\:form-2col textarea { grid-column: 1 / -1 !important; }
+  }
+  body { padding-bottom: 0; padding-top: 0; }
+  @media (max-width: 639px) { body { padding-bottom: 4rem; } footer { padding-bottom: 4rem; } }
+</style>
+
+
+<!-- ════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════ -->
+<script>
+  // ── Scroll reveal ──
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObserver.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
+
+  // ── Mobile nav ──
+  const navToggle = document.getElementById('main-nav-toggle');
+  const mobileDrawer = document.getElementById('mobile-drawer');
+  let menuOpen = false;
+
+  function closeNav() {
+    menuOpen = false;
+    mobileDrawer.classList.remove('open');
+    navToggle.classList.remove('open');
+  }
+
+  navToggle.addEventListener('click', () => {
+    menuOpen = !menuOpen;
+    mobileDrawer.classList.toggle('open', menuOpen);
+    navToggle.classList.toggle('open', menuOpen);
+  });
+
+  document.addEventListener('click', e => {
+    if (menuOpen && !navToggle.contains(e.target) && !mobileDrawer.contains(e.target)) closeNav();
+  });
+
+  // ── Navbar: transparent over hero → solid on scroll ──
+  const navRoot = document.getElementById('nav-root');
+  const heroSection = document.getElementById('home');
+
+  function updateNav() {
+    const heroBottom = heroSection ? heroSection.getBoundingClientRect().bottom : 0;
+    if (heroBottom <= 80) {
+      navRoot.classList.add('scrolled');
+    } else {
+      navRoot.classList.remove('scrolled');
+    }
+  }
+  updateNav(); // run on load
+  window.addEventListener('scroll', updateNav, { passive: true });
+
+  // ── Show logo subtitle on SM+ ──
+  const logoSub = document.querySelector('.logo-sub');
+  if (logoSub && window.innerWidth >= 640) logoSub.style.display = 'block';
+</script>
+
+</body>
+</html>
